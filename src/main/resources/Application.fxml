@@ -20,7 +20,7 @@
             <graphic>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shadow" />
             </graphic></CheckBox>
-         <CheckBox layoutX="15.0" layoutY="14.0" mnemonicParsing="false">
+         <CheckBox fx:id="shinyCheckBox" layoutX="15.0" layoutY="14.0" mnemonicParsing="false">
             <graphic>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shiny" />
             </graphic>
