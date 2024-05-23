@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.*?>
+
+<VBox alignment="CENTER" prefHeight="206.0" prefWidth="347.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller">
+    <AnchorPane prefHeight="200" prefWidth="200">
+        <children>
+            <CheckComboBox fx:id="comboBox" layoutX="50.0" layoutY="48.0" prefHeight="25.0" prefWidth="247.0" />
+            <Button layoutX="135.0" layoutY="121.0" onAction="#saveToTxt" text="Save to TXT" />
+        </children>
+    </AnchorPane>
+</VBox>
