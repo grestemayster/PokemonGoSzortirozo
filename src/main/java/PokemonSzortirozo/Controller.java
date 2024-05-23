@@ -2,10 +2,12 @@ package PokemonSzortirozo;
 
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import org.controlsfx.control.CheckComboBox;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,13 +16,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Controller {
 
     private List<String> selectedItems = new ArrayList<>();
+    private boolean isAppraisalComboBoxUpdating = false; // Logikai zár
 
     @FXML
     private CheckComboBox<String> comboBox;
+
+    @FXML
+    private CheckComboBox<String> AppraisalcomboBox;
 
     @FXML
     private ChoiceBox<String> ShinyChoiceBox;
@@ -31,26 +36,24 @@ public class Controller {
     @FXML
     private ChoiceBox<String> CostumeChoiceBox;
 
-
     @FXML
     public void initialize() {
-
         initializeChoiceBox();
 
         try {
             List<String> lines = Files.readAllLines(Paths.get("data.csv"));
             comboBox.getItems().addAll(lines);
 
-            // Create a FilteredList wrapping the ObservableList
+            // FilteredList létrehozása az ObservableList becsomagolásával
             FilteredList<String> filteredItems = new FilteredList<>(FXCollections.observableArrayList(lines), p -> true);
 
-            // Add a listener to the comboBox
-            comboBox.getCheckModel().getCheckedItems().addListener((InvalidationListener) (change) -> {
+            // Listener hozzáadása a comboBox-hoz
+            comboBox.getCheckModel().getCheckedItems().addListener((InvalidationListener) change -> {
                 updateSelectedItems();
                 System.out.println("Checked items: " + selectedItems);
             });
 
-            // Add a listener to the CheckBox
+            // Listenerek hozzáadása a ChoiceBox-okhoz
             ShinyChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 updateSelectedItems();
                 System.out.println("Checked items: " + selectedItems);
@@ -74,18 +77,37 @@ public class Controller {
     private void initializeChoiceBox() {
         // Töltsük fel a ChoiceBox-ot a lehetőségekkel
         ShinyChoiceBox.getItems().addAll("Shiny, de nem csak shiny", "Csak shiny", "Nem lehet Shiny");
-        // Alapértelmezett választás
         ShinyChoiceBox.setValue("Shiny, de nem csak shiny");
 
-
-        ShadowChoiceBox.getItems().addAll("Minden forma","Csak Sima","Shadow,Purified","Csak Shadow","Csak Purified");
+        ShadowChoiceBox.getItems().addAll("Minden forma", "Csak Sima", "Shadow,Purified", "Csak Shadow", "Csak Purified");
         ShadowChoiceBox.setValue("Minden forma");
 
-        CostumeChoiceBox.getItems().addAll("Minden kinézet","Csak kinézet nélküli","Csak kinézetes");
+        CostumeChoiceBox.getItems().addAll("Minden kinézet", "Csak kinézet nélküli", "Csak kinézetes");
         CostumeChoiceBox.setValue("Minden kinézet");
 
+        AppraisalcomboBox.getItems().addAll("Minden értékelés", "0*", "1*", "2*", "3*", "4*");
 
+        AppraisalcomboBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
+            if (isAppraisalComboBoxUpdating) return; // Ha éppen frissítjük, akkor kilépünk a metódusból
 
+            isAppraisalComboBoxUpdating = true; // Beállítjuk a logikai zárat
+            try {
+                while (c.next()) {
+                    if (c.wasAdded() && c.getAddedSubList().contains("Minden értékelés")) {
+                        // "Minden értékelés" kiválasztása esetén minden más is kiválasztásra kerül
+                        AppraisalcomboBox.getCheckModel().checkAll();
+                    } else if (c.wasRemoved() && c.getRemoved().contains("Minden értékelés")) {
+                        // "Minden értékelés" kiválasztásának megszüntetése esetén minden más is törlésre kerül
+                        AppraisalcomboBox.getCheckModel().clearChecks();
+                    } else if (!AppraisalcomboBox.getCheckModel().isChecked(0) && AppraisalcomboBox.getCheckModel().getCheckedItems().size() == AppraisalcomboBox.getItems().size() - 1) {
+                        // Ha minden elem kiválasztásra került, "Minden értékelés" is kiválasztásra kerül
+                        AppraisalcomboBox.getCheckModel().check("Minden értékelés");
+                    }
+                }
+            } finally {
+                isAppraisalComboBoxUpdating = false; // Visszaállítjuk a logikai zárat
+            }
+        });
     }
 
     private void updateSelectedItems() {
@@ -102,13 +124,13 @@ public class Controller {
                     selectedItems.add("!shiny");
                     break;
                 default:
-                    // "Alap" case, do nothing
+                    // Alapértelmezett eset, nem csinál semmit
                     break;
             }
         }
 
         String Shadowchoice = ShadowChoiceBox.getSelectionModel().getSelectedItem();
-        if(Shadowchoice != null) {
+        if (Shadowchoice != null) {
             switch (Shadowchoice) {
                 case "Csak Sima":
                     selectedItems.add("!shadow&!purified");
@@ -124,12 +146,11 @@ public class Controller {
                     break;
                 case "Minden forma":
                     break;
-
             }
         }
 
         String Costumechoice = CostumeChoiceBox.getSelectionModel().getSelectedItem();
-        if(Costumechoice != null) {
+        if (Costumechoice != null) {
             switch (Costumechoice) {
                 case "Csak kinézet nélküli":
                     selectedItems.add("!costumed");
@@ -139,14 +160,11 @@ public class Controller {
                     break;
                 case "Minden kinézet":
                     break;
-
             }
         }
 
-
-
-
-
+        selectedItems.addAll(AppraisalcomboBox.getCheckModel().getCheckedItems());
+        selectedItems.remove("Minden értékelés"); // "Minden értékelés" opció eltávolítása a listából, ha kiválasztották
     }
 
     @FXML
@@ -157,7 +175,7 @@ public class Controller {
                 for (String item : selectedItems) {
                     sb.append(item).append(",");
                 }
-                sb.setLength(sb.length() - 1); // Remove the last ','
+                sb.setLength(sb.length() - 1); // Utolsó ',' eltávolítása
                 writer.write(sb.toString());
                 writer.newLine();
             } catch (IOException e) {

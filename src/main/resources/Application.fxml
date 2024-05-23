@@ -12,10 +12,10 @@
         <children>
             <CheckComboBox fx:id="comboBox" layoutX="51.0" layoutY="119.0" prefHeight="25.0" prefWidth="247.0" />
             <Button layoutX="176.0" layoutY="161.0" onAction="#saveToTxt" text="Save to TXT" />
-         <ChoiceBox fx:id="ShinyChoiceBox" layoutX="14.0" layoutY="10.0" prefHeight="25.0" prefWidth="180.0" />
-         <ChoiceBox fx:id="ShadowChoiceBox" layoutX="228.0" layoutY="10.0" prefHeight="25.0" prefWidth="180.0" />
-
-         <ChoiceBox fx:id="CostumeChoiceBox" layoutX="228.0" layoutY="60.0" prefHeight="25.0" prefWidth="180.0" />
+            <ChoiceBox fx:id="ShinyChoiceBox" layoutX="14.0" layoutY="10.0" prefHeight="25.0" prefWidth="180.0" />
+            <ChoiceBox fx:id="ShadowChoiceBox" layoutX="228.0" layoutY="10.0" prefHeight="25.0" prefWidth="180.0" />
+            <ChoiceBox fx:id="CostumeChoiceBox" layoutX="228.0" layoutY="60.0" prefHeight="25.0" prefWidth="180.0" />
+            <CheckComboBox fx:id="AppraisalcomboBox" layoutX="14.0" layoutY="60.0" prefHeight="25.0" prefWidth="180.0" />
         </children>
     </AnchorPane>
 </VBox>
