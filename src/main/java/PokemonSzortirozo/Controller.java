@@ -4,11 +4,8 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import org.controlsfx.control.CheckComboBox;
-
-import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Controller {
 
@@ -28,22 +26,17 @@ public class Controller {
     private ChoiceBox<String> ShinyChoiceBox;
 
     @FXML
-    private CheckBox FourStarCheckBox;
+    private ChoiceBox<String> ShadowChoiceBox;
 
     @FXML
-    private CheckBox ShadowCheckBox;
-
-
-    @FXML
-    private CheckBox EventCheckBox;
+    private ChoiceBox<String> CostumeChoiceBox;
 
 
     @FXML
     public void initialize() {
-        // Töltsük fel a ChoiceBox-ot a lehetőségekkel
-        ShinyChoiceBox.getItems().addAll("Shiny, de nem csak shiny", "Csak shiny", "Nem lehet Shiny");
-        // Alapértelmezett választás
-        ShinyChoiceBox.setValue("Shiny, de nem csak shiny");
+
+        initializeChoiceBox();
+
         try {
             List<String> lines = Files.readAllLines(Paths.get("data.csv"));
             comboBox.getItems().addAll(lines);
@@ -63,17 +56,12 @@ public class Controller {
                 System.out.println("Checked items: " + selectedItems);
             });
 
-            FourStarCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            ShadowChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 updateSelectedItems();
                 System.out.println("Checked items: " + selectedItems);
             });
 
-            ShadowCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                updateSelectedItems();
-                System.out.println("Checked items: " + selectedItems);
-            });
-
-            EventCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            CostumeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 updateSelectedItems();
                 System.out.println("Checked items: " + selectedItems);
             });
@@ -83,13 +71,30 @@ public class Controller {
         }
     }
 
+    private void initializeChoiceBox() {
+        // Töltsük fel a ChoiceBox-ot a lehetőségekkel
+        ShinyChoiceBox.getItems().addAll("Shiny, de nem csak shiny", "Csak shiny", "Nem lehet Shiny");
+        // Alapértelmezett választás
+        ShinyChoiceBox.setValue("Shiny, de nem csak shiny");
+
+
+        ShadowChoiceBox.getItems().addAll("Minden forma","Csak Sima","Shadow,Purified","Csak Shadow","Csak Purified");
+        ShadowChoiceBox.setValue("Minden forma");
+
+        CostumeChoiceBox.getItems().addAll("Minden kinézet","Csak kinézet nélküli","Csak kinézetes");
+        CostumeChoiceBox.setValue("Minden kinézet");
+
+
+
+    }
+
     private void updateSelectedItems() {
         selectedItems.clear();
         selectedItems.addAll(comboBox.getCheckModel().getCheckedItems());
 
-        String choice = ShinyChoiceBox.getSelectionModel().getSelectedItem();
-        if (choice != null) {
-            switch (choice) {
+        String Shinychoice = ShinyChoiceBox.getSelectionModel().getSelectedItem();
+        if (Shinychoice != null) {
+            switch (Shinychoice) {
                 case "Csak shiny":
                     selectedItems.add("shiny");
                     break;
@@ -102,20 +107,46 @@ public class Controller {
             }
         }
 
+        String Shadowchoice = ShadowChoiceBox.getSelectionModel().getSelectedItem();
+        if(Shadowchoice != null) {
+            switch (Shadowchoice) {
+                case "Csak Sima":
+                    selectedItems.add("!shadow&!purified");
+                    break;
+                case "Shadow,Purified":
+                    selectedItems.add("shadow,purified");
+                    break;
+                case "Csak Shadow":
+                    selectedItems.add("shadow");
+                    break;
+                case "Csak Purified":
+                    selectedItems.add("purified");
+                    break;
+                case "Minden forma":
+                    break;
 
-        if (FourStarCheckBox.isSelected()) {
-            selectedItems.add("4*");
+            }
         }
-        if (ShadowCheckBox.isSelected()) {
-            selectedItems.add("Shadow");
-        } else {
-            selectedItems.add("!Shadow");
+
+        String Costumechoice = CostumeChoiceBox.getSelectionModel().getSelectedItem();
+        if(Costumechoice != null) {
+            switch (Costumechoice) {
+                case "Csak kinézet nélküli":
+                    selectedItems.add("!costumed");
+                    break;
+                case "Csak kinézetes":
+                    selectedItems.add("costumed");
+                    break;
+                case "Minden kinézet":
+                    break;
+
+            }
         }
-        if (EventCheckBox.isSelected()) {
-            selectedItems.add("Costumed");
-        } else {
-            selectedItems.add("!Costumed");
-        }
+
+
+
+
+
     }
 
     @FXML
@@ -124,9 +155,9 @@ public class Controller {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt", true))) {
                 StringBuilder sb = new StringBuilder();
                 for (String item : selectedItems) {
-                    sb.append(item).append("&");
+                    sb.append(item).append(",");
                 }
-                sb.setLength(sb.length() - 1); // Remove the last '&'
+                sb.setLength(sb.length() - 1); // Remove the last ','
                 writer.write(sb.toString());
                 writer.newLine();
             } catch (IOException e) {

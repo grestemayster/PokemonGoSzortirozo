@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/Application.fxml"));
         primaryStage.setTitle("CSV to TXT");
-        primaryStage.setScene(new Scene(root,347 , 206));
+        primaryStage.setScene(new Scene(root,429 , 206));
         primaryStage.show();
     }
 
