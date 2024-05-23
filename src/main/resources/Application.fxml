@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import org.controlsfx.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.CheckComboBox?>
 
-<VBox alignment="CENTER" prefHeight="206.0" prefWidth="347.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller">
+<VBox alignment="CENTER" prefHeight="206.0" prefWidth="347.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller">
     <AnchorPane prefHeight="200" prefWidth="200">
         <children>
-            <CheckComboBox fx:id="comboBox" layoutX="50.0" layoutY="48.0" prefHeight="25.0" prefWidth="247.0" />
-            <Button layoutX="135.0" layoutY="121.0" onAction="#saveToTxt" text="Save to TXT" />
+            <CheckComboBox fx:id="comboBox" layoutX="51.0" layoutY="119.0" prefHeight="25.0" prefWidth="247.0" />
+            <Button layoutX="135.0" layoutY="161.0" onAction="#saveToTxt" text="Save to TXT" />
+         <CheckBox layoutX="15.0" layoutY="48.0" mnemonicParsing="false">
+            <graphic>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="4*" />
+            </graphic></CheckBox>
+         <CheckBox layoutX="175.0" layoutY="14.0" mnemonicParsing="false">
+            <graphic>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shadow" />
+            </graphic></CheckBox>
+         <CheckBox layoutX="15.0" layoutY="14.0" mnemonicParsing="false">
+            <graphic>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shiny" />
+            </graphic>
+         </CheckBox>
+         <CheckBox layoutX="175.0" layoutY="48.0" mnemonicParsing="false">
+            <graphic>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Eventes" />
+            </graphic>
+         </CheckBox>
         </children>
     </AnchorPane>
 </VBox>
