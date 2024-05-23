@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
@@ -12,31 +13,20 @@
         <children>
             <CheckComboBox fx:id="comboBox" layoutX="51.0" layoutY="119.0" prefHeight="25.0" prefWidth="247.0" />
             <Button layoutX="135.0" layoutY="161.0" onAction="#saveToTxt" text="Save to TXT" />
-
          <CheckBox fx:id="FourStarCheckBox" layoutX="15.0" layoutY="48.0" mnemonicParsing="false">
             <graphic>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="4*" />
-            </graphic>
-         </CheckBox>
-
+            </graphic></CheckBox>
          <CheckBox fx:id="ShadowCheckBox" layoutX="175.0" layoutY="14.0" mnemonicParsing="false">
             <graphic>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shadow" />
-            </graphic>
-         </CheckBox>
-
-         <CheckBox fx:id="ShinyCheckBox" layoutX="15.0" layoutY="14.0" mnemonicParsing="false">
-            <graphic>
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shiny" />
-            </graphic>
-         </CheckBox>
-
+            </graphic></CheckBox>
          <CheckBox fx:id="EventCheckBox" layoutX="175.0" layoutY="48.0" mnemonicParsing="false">
             <graphic>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Eventes" />
             </graphic>
          </CheckBox>
-
+         <ChoiceBox fx:id="ShinyChoiceBox" layoutX="14.0" layoutY="10.0" prefWidth="150.0" />
         </children>
     </AnchorPane>
 </VBox>
