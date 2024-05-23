@@ -22,9 +22,20 @@ public class Controller {
     private CheckComboBox<String> comboBox;
 
     @FXML
-    private CheckBox shinyCheckBox;
+    private CheckBox ShinyCheckBox;
 
     private List<String> selectedItems = new ArrayList<>();
+
+    @FXML
+    private CheckBox FourStarCheckBox;
+
+    @FXML
+    private CheckBox ShadowCheckBox;
+
+
+    @FXML
+    private CheckBox EventCheckBox;
+
 
     @FXML
     public void initialize() {
@@ -42,7 +53,22 @@ public class Controller {
             });
 
             // Add a listener to the CheckBox
-            shinyCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            ShinyCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                updateSelectedItems();
+                System.out.println("Checked items: " + selectedItems);
+            });
+
+            FourStarCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                updateSelectedItems();
+                System.out.println("Checked items: " + selectedItems);
+            });
+
+            ShadowCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                updateSelectedItems();
+                System.out.println("Checked items: " + selectedItems);
+            });
+
+            EventCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
                 updateSelectedItems();
                 System.out.println("Checked items: " + selectedItems);
             });
@@ -55,10 +81,23 @@ public class Controller {
     private void updateSelectedItems() {
         selectedItems.clear();
         selectedItems.addAll(comboBox.getCheckModel().getCheckedItems());
-        if (shinyCheckBox.isSelected()) {
-            selectedItems.add("shiny");
+        if (ShinyCheckBox.isSelected()) {
+            selectedItems.add("Shiny");
         } else {
-            selectedItems.add("!shiny");
+            selectedItems.add("!Shiny");
+        }
+        if (FourStarCheckBox.isSelected()) {
+            selectedItems.add("4*");
+        }
+        if (ShadowCheckBox.isSelected()) {
+            selectedItems.add("Shadow");
+        } else {
+            selectedItems.add("!Shadow");
+        }
+        if (EventCheckBox.isSelected()) {
+            selectedItems.add("Costumed");
+        } else {
+            selectedItems.add("!Costumed");
         }
     }
 
