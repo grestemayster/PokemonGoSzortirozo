@@ -145,6 +145,16 @@ public class Controller {
                                 selectedPokemons.remove(getItem());
                             }
                         });
+
+                        setOnMouseClicked(event -> {
+                            if (checkBox.isSelected()) {
+                                checkBox.setSelected(false);
+                                selectedPokemons.remove(getItem());
+                            } else {
+                                checkBox.setSelected(true);
+                                selectedPokemons.add(getItem());
+                            }
+                        });
                     }
 
                     @Override
