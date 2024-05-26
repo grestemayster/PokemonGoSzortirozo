@@ -11,8 +11,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/Application.fxml"));
-        primaryStage.setTitle("CSV to TXT");
-        primaryStage.setScene(new Scene(root,429 , 206));
+        primaryStage.setTitle("Pokémon Szortírozó");
+        primaryStage.setScene(new Scene(root, 429, 206));
         primaryStage.show();
     }
 

@@ -22,9 +22,6 @@ public class Controller {
     private boolean isAppraisalComboBoxUpdating = false; // Logikai zár
 
     @FXML
-    private CheckComboBox<String> comboBox;
-
-    @FXML
     private CheckComboBox<String> AppraisalcomboBox;
 
     @FXML
@@ -42,16 +39,9 @@ public class Controller {
 
         try {
             List<String> lines = Files.readAllLines(Paths.get("data.csv"));
-            comboBox.getItems().addAll(lines);
 
             // FilteredList létrehozása az ObservableList becsomagolásával
             FilteredList<String> filteredItems = new FilteredList<>(FXCollections.observableArrayList(lines), p -> true);
-
-            // Listener hozzáadása a comboBox-hoz
-            comboBox.getCheckModel().getCheckedItems().addListener((InvalidationListener) change -> {
-                updateSelectedItems();
-                System.out.println("Checked items: " + selectedItems);
-            });
 
             // Listenerek hozzáadása a ChoiceBox-okhoz
             ShinyChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -112,7 +102,6 @@ public class Controller {
 
     private void updateSelectedItems() {
         selectedItems.clear();
-        selectedItems.addAll(comboBox.getCheckModel().getCheckedItems());
 
         String Shinychoice = ShinyChoiceBox.getSelectionModel().getSelectedItem();
         if (Shinychoice != null) {
