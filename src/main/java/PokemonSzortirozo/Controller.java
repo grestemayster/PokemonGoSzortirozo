@@ -1,29 +1,19 @@
 package PokemonSzortirozo;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 public class Controller {
 
@@ -116,6 +106,7 @@ public class Controller {
                             AppraisalcomboBox.getCheckModel().clearCheck("Minden értékelés");
                         }
                     }
+                    updateSelectedItems();
                 }
             } finally {
                 isAppraisalComboBoxUpdating = false;

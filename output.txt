@@ -1,1 +1,2 @@
 
+charmander,blastoise,charizard,0*,2*,3*,4*
