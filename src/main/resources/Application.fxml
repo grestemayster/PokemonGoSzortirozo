@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.*?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="476.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="476.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller" stylesheets="@/background.css">
     <children>
-        <ComboBox fx:id="PokemonComboBox" prefHeight="25.0" prefWidth="247.0" promptText="Válaszd  ki a pokémont" />
+        <ComboBox fx:id="PokemonComboBox" prefHeight="25.0" prefWidth="247.0" promptText="Válaszd ki a pokémont" />
         <GridPane alignment="CENTER" hgap="10" prefHeight="60.0" prefWidth="427.0" vgap="10">
             <children>
                 <ChoiceBox fx:id="ShinyChoiceBox" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -14,14 +14,14 @@
                 <ChoiceBox fx:id="CostumeChoiceBox" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <CheckComboBox fx:id="AppraisalcomboBox" prefHeight="25.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
         </GridPane>
         <Button onAction="#saveToTxt" text="Save to TXT" />
     </children>
