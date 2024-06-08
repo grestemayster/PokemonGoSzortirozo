@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
-import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.*;
@@ -14,23 +13,25 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class Controller {
 
     private List<String> selectedItems = new ArrayList<>();
     private boolean isAppraisalComboBoxUpdating = false;
+    private boolean isShinyChoiceBoxUpdating = false;
+    private boolean isShadowChoiceBoxUpdating = false;
+    private boolean isCostumeChoiceBoxUpdating = false;
 
     @FXML
     private CheckComboBox<String> AppraisalcomboBox;
 
     @FXML
-    private ChoiceBox<String> ShinyChoiceBox;
+    private CheckComboBox<String> ShinyChoiceBox;
 
     @FXML
-    private ChoiceBox<String> ShadowChoiceBox;
+    private CheckComboBox<String> ShadowChoiceBox;
 
     @FXML
-    private ChoiceBox<String> CostumeChoiceBox;
+    private CheckComboBox<String> CostumeChoiceBox;
 
     @FXML
     private ComboBox<String> PokemonComboBox;
@@ -44,25 +45,70 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        initializeChoiceBox();
+        initializeCheckComboBoxes();
 
         try {
             allPokemons = Files.readAllLines(Paths.get("data.csv"));
             initializePokemonComboBox();
 
-            ShinyChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                updateSelectedItems();
-                System.out.println("Checked items: " + selectedItems);
+            ShinyChoiceBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
+                if (isShinyChoiceBoxUpdating) return;
+
+                isShinyChoiceBoxUpdating = true;
+                try {
+                    while (c.next()) {
+                        if (c.wasAdded() || c.wasRemoved()) {
+                            if (ShinyChoiceBox.getCheckModel().getCheckedItems().size() > 1) {
+                                String lastAdded = c.getAddedSubList().get(c.getAddedSubList().size() - 1);
+                                ShinyChoiceBox.getCheckModel().clearChecks();
+                                ShinyChoiceBox.getCheckModel().check(lastAdded);
+                            }
+                        }
+                        updateSelectedItems();
+                    }
+                } finally {
+                    isShinyChoiceBoxUpdating = false;
+                }
             });
 
-            ShadowChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                updateSelectedItems();
-                System.out.println("Checked items: " + selectedItems);
+            ShadowChoiceBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
+                if (isShadowChoiceBoxUpdating) return;
+
+                isShadowChoiceBoxUpdating = true;
+                try {
+                    while (c.next()) {
+                        if (c.wasAdded() || c.wasRemoved()) {
+                            if (ShadowChoiceBox.getCheckModel().getCheckedItems().size() > 1) {
+                                String lastAdded = c.getAddedSubList().get(c.getAddedSubList().size() - 1);
+                                ShadowChoiceBox.getCheckModel().clearChecks();
+                                ShadowChoiceBox.getCheckModel().check(lastAdded);
+                            }
+                        }
+                        updateSelectedItems();
+                    }
+                } finally {
+                    isShadowChoiceBoxUpdating = false;
+                }
             });
 
-            CostumeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                updateSelectedItems();
-                System.out.println("Checked items: " + selectedItems);
+            CostumeChoiceBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
+                if (isCostumeChoiceBoxUpdating) return;
+
+                isCostumeChoiceBoxUpdating = true;
+                try {
+                    while (c.next()) {
+                        if (c.wasAdded() || c.wasRemoved()) {
+                            if (CostumeChoiceBox.getCheckModel().getCheckedItems().size() > 1) {
+                                String lastAdded = c.getAddedSubList().get(c.getAddedSubList().size() - 1);
+                                CostumeChoiceBox.getCheckModel().clearChecks();
+                                CostumeChoiceBox.getCheckModel().check(lastAdded);
+                            }
+                        }
+                        updateSelectedItems();
+                    }
+                } finally {
+                    isCostumeChoiceBoxUpdating = false;
+                }
             });
 
             selectedPokemons.addListener((ListChangeListener<String>) c -> {
@@ -75,15 +121,12 @@ public class Controller {
         }
     }
 
-    private void initializeChoiceBox() {
+    private void initializeCheckComboBoxes() {
         ShinyChoiceBox.getItems().addAll("Shiny, de nem csak shiny", "Csak shiny", "Nem lehet Shiny");
-        ShinyChoiceBox.setValue("Shiny, de nem csak shiny");
 
         ShadowChoiceBox.getItems().addAll("Minden forma", "Csak Sima", "Shadow,Purified", "Csak Shadow", "Csak Purified");
-        ShadowChoiceBox.setValue("Minden forma");
 
         CostumeChoiceBox.getItems().addAll("Minden kinézet", "Csak kinézet nélküli", "Csak kinézetes");
-        CostumeChoiceBox.setValue("Minden kinézet");
 
         AppraisalcomboBox.getItems().addAll("Minden értékelés", "0*", "1*", "2*", "3*", "4*");
 
@@ -122,44 +165,39 @@ public class Controller {
         filteredPokemons = FXCollections.observableArrayList(allPokemons);
         listView.setItems(filteredPokemons);
 
-        listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+        listView.setCellFactory(param -> new ListCell<String>() {
+            private final CheckBox checkBox = new CheckBox();
+
+            {
+                checkBox.setOnAction(event -> {
+                    if (checkBox.isSelected()) {
+                        selectedPokemons.add(getItem());
+                    } else {
+                        selectedPokemons.remove(getItem());
+                    }
+                });
+
+                setOnMouseClicked(event -> {
+                    if (checkBox.isSelected()) {
+                        checkBox.setSelected(false);
+                        selectedPokemons.remove(getItem());
+                    } else {
+                        checkBox.setSelected(true);
+                        selectedPokemons.add(getItem());
+                    }
+                });
+            }
+
             @Override
-            public ListCell<String> call(ListView<String> param) {
-                return new ListCell<String>() {
-                    private final CheckBox checkBox = new CheckBox();
-
-                    {
-                        checkBox.setOnAction(event -> {
-                            if (checkBox.isSelected()) {
-                                selectedPokemons.add(getItem());
-                            } else {
-                                selectedPokemons.remove(getItem());
-                            }
-                        });
-
-                        setOnMouseClicked(event -> {
-                            if (checkBox.isSelected()) {
-                                checkBox.setSelected(false);
-                                selectedPokemons.remove(getItem());
-                            } else {
-                                checkBox.setSelected(true);
-                                selectedPokemons.add(getItem());
-                            }
-                        });
-                    }
-
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setGraphic(null);
-                        } else {
-                            checkBox.setText(item);
-                            checkBox.setSelected(selectedPokemons.contains(item));
-                            setGraphic(checkBox);
-                        }
-                    }
-                };
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    checkBox.setText(item);
+                    checkBox.setSelected(selectedPokemons.contains(item));
+                    setGraphic(checkBox);
+                }
             }
         });
 
@@ -172,7 +210,9 @@ public class Controller {
         popup.getContent().add(vbox);
 
         PokemonComboBox.setOnMouseClicked(event -> {
-            if (!popup.isShowing()) {
+            if (popup.isShowing()) {
+                popup.hide();
+            } else {
                 popup.show(PokemonComboBox.getScene().getWindow(),
                         PokemonComboBox.localToScreen(PokemonComboBox.getBoundsInLocal()).getMinX(),
                         PokemonComboBox.localToScreen(PokemonComboBox.getBoundsInLocal()).getMaxY());
@@ -221,52 +261,29 @@ public class Controller {
         selectedItems.clear();
         selectedItems.addAll(selectedPokemons);
 
-        String Shinychoice = ShinyChoiceBox.getSelectionModel().getSelectedItem();
-        if (Shinychoice != null) {
-            switch (Shinychoice) {
-                case "Csak shiny":
-                    selectedItems.add("shiny");
-                    break;
-                case "Nem lehet Shiny":
-                    selectedItems.add("!shiny");
-                    break;
-                default:
-                    break;
-            }
+        List<String> shinyChoices = ShinyChoiceBox.getCheckModel().getCheckedItems();
+        if (shinyChoices.contains("Csak shiny")) {
+            selectedItems.add("shiny");
+        } else if (shinyChoices.contains("Nem lehet Shiny")) {
+            selectedItems.add("!shiny");
         }
 
-        String Shadowchoice = ShadowChoiceBox.getSelectionModel().getSelectedItem();
-        if (Shadowchoice != null) {
-            switch (Shadowchoice) {
-                case "Csak Sima":
-                    selectedItems.add("!shadow&!purified");
-                    break;
-                case "Shadow,Purified":
-                    selectedItems.add("shadow,purified");
-                    break;
-                case "Csak Shadow":
-                    selectedItems.add("shadow");
-                    break;
-                case "Csak Purified":
-                    selectedItems.add("purified");
-                    break;
-                case "Minden forma":
-                    break;
-            }
+        List<String> shadowChoices = ShadowChoiceBox.getCheckModel().getCheckedItems();
+        if (shadowChoices.contains("Csak Sima")) {
+            selectedItems.add("!shadow&!purified");
+        } else if (shadowChoices.contains("Shadow,Purified")) {
+            selectedItems.add("shadow,purified");
+        } else if (shadowChoices.contains("Csak Shadow")) {
+            selectedItems.add("shadow");
+        } else if (shadowChoices.contains("Csak Purified")) {
+            selectedItems.add("purified");
         }
 
-        String Costumechoice = CostumeChoiceBox.getSelectionModel().getSelectedItem();
-        if (Costumechoice != null) {
-            switch (Costumechoice) {
-                case "Csak kinézet nélküli":
-                    selectedItems.add("!costumed");
-                    break;
-                case "Csak kinézetes":
-                    selectedItems.add("costumed");
-                    break;
-                case "Minden kinézet":
-                    break;
-            }
+        List<String> costumeChoices = CostumeChoiceBox.getCheckModel().getCheckedItems();
+        if (costumeChoices.contains("Csak kinézet nélküli")) {
+            selectedItems.add("!costumed");
+        } else if (costumeChoices.contains("Csak kinézetes")) {
+            selectedItems.add("costumed");
         }
 
         selectedItems.addAll(AppraisalcomboBox.getCheckModel().getCheckedItems());
