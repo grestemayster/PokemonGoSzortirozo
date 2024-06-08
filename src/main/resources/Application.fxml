@@ -10,13 +10,19 @@
     <top>
         <MenuBar>
             <Menu text="Opciók">
-                <MenuItem onAction="#showSelectedItems" text="Show Selected Items" />
-                <MenuItem onAction="#saveToTxt" text="Save to TXT">
+                <MenuItem onAction="#showSelectedItems" text="Menteni kívánt sor megjelenítése">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator></MenuItem>
+                <MenuItem onAction="#saveToTxt" text="Mentés">
                     <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </MenuItem>
-                <MenuItem onAction="#toggleAddPokemonMenu" text="Add Pokémon" />
+                <MenuItem onAction="#toggleAddPokemonMenu" text="Pokemon hozzáadása">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator></MenuItem>
             </Menu>
         </MenuBar>
     </top>
@@ -37,22 +43,21 @@
                     <CheckComboBox fx:id="CostumeChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki a kinézetét" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <CheckComboBox fx:id="AppraisalcomboBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki az értékelését" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 </children>
-                <columnConstraints>
-                    <ColumnConstraints />
-                    <ColumnConstraints />
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints />
-                    <RowConstraints />
-                </rowConstraints>
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
-            <!-- Új elemek, amelyek kezdetben rejtve vannak -->
             <VBox fx:id="addPokemonVBox" alignment="CENTER" spacing="10" visible="false">
                 <HBox alignment="CENTER" spacing="10">
-                    <TextArea fx:id="addPokemonTextArea" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" promptText="Új Pokémon név" prefHeight="25.0" prefWidth="200.0" />
+                    <TextArea fx:id="addPokemonTextArea" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="200.0" promptText="Új Pokémon név" />
                     <Button fx:id="addPokemonButton" onAction="#addPokemon" style="-fx-font-size: 20px; -fx-background-color: transparent;">
                         <graphic>
-                            <Label text="✓" textFill="#15ff00" style="-fx-font-size: 20px;"/>
+                            <Label style="-fx-font-size: 20px;" text="✓" textFill="#15ff00" />
                         </graphic>
                     </Button>
                 </HBox>
