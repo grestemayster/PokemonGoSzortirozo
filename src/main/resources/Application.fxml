@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.*?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="476.0" spacing="10" stylesheets="@/background.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller">
-    <children>
-        <TextArea fx:id="selectedItemsTextArea" editable="false" maxHeight="38.0" maxWidth="370.0" minHeight="25.0" minWidth="370.0" scrollLeft="1.0" scrollTop="11.0" wrapText="true" />
-        <ComboBox fx:id="PokemonComboBox" prefHeight="25.0" prefWidth="247.0" promptText="Válaszd ki a pokémont" />
-        <GridPane alignment="CENTER" hgap="10" prefHeight="60.0" prefWidth="427.0" vgap="10">
-            <children>
-                <CheckComboBox fx:id="ShinyChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki a fényességet" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <CheckComboBox fx:id="ShadowChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki az identitását" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <CheckComboBox fx:id="CostumeChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki a kinézetét" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <CheckComboBox fx:id="AppraisalcomboBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki az értékelését" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            </children>
-            <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-            </rowConstraints>
-        </GridPane>
-        <Button onAction="#saveToTxt" text="Save to TXT" />
-    </children>
-</VBox>
+<BorderPane prefHeight="400.0" prefWidth="476.0" stylesheets="@/background.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller">
+    <top>
+        <MenuBar>
+            <Menu text="Opciók">
+                <MenuItem onAction="#showSelectedItems" text="Show Selected Items" />
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <VBox alignment="CENTER" spacing="10">
+            <TextArea fx:id="selectedItemsTextArea" editable="false" maxHeight="38.0" maxWidth="370.0" minHeight="25.0" minWidth="370.0" visible="false"  />
+            <HBox alignment="CENTER">
+                <ComboBox fx:id="PokemonComboBox" prefHeight="25.0" prefWidth="247.0" promptText="Válaszd ki a pokémont">
+                    <HBox.margin>
+                        <Insets top="90.0" />
+                    </HBox.margin>
+                </ComboBox>
+            </HBox>
+            <GridPane alignment="CENTER" hgap="10" prefHeight="60.0" prefWidth="427.0" vgap="10">
+                <children>
+                    <CheckComboBox fx:id="ShinyChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki a fényességet" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <CheckComboBox fx:id="ShadowChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki az identitását" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <CheckComboBox fx:id="CostumeChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki a kinézetét" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <CheckComboBox fx:id="AppraisalcomboBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki az értékelését" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                </children>
+                <columnConstraints>
+                    <ColumnConstraints />
+                    <ColumnConstraints />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints />
+                    <RowConstraints />
+                </rowConstraints>
+            </GridPane>
+            <Button onAction="#saveToTxt" text="Save to TXT" />
+        </VBox>
+    </center>
+</BorderPane>

@@ -37,7 +37,7 @@ public class Controller {
     private ComboBox<String> PokemonComboBox;
 
     @FXML
-    private TextArea selectedItemsTextArea;  // Add this line to link the TextArea
+    private TextArea selectedItemsTextArea;
 
     private TextField searchField;
     private ListView<String> listView;
@@ -294,6 +294,12 @@ public class Controller {
 
         // Update the TextArea with the selected items
         selectedItemsTextArea.setText(String.join(", ", selectedItems));
+        selectedItemsTextArea.setScrollTop(Double.MAX_VALUE);  // Scroll to the bottom
+    }
+
+    @FXML
+    private void showSelectedItems() {
+        selectedItemsTextArea.setVisible(!selectedItemsTextArea.isVisible());
     }
 
     @FXML
