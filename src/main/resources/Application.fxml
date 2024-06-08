@@ -6,7 +6,8 @@
 
 <VBox alignment="CENTER" prefHeight="400.0" prefWidth="476.0" spacing="10" stylesheets="@/background.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PokemonSzortirozo.Controller">
     <children>
-            <ComboBox fx:id="PokemonComboBox" prefHeight="25.0" prefWidth="247.0" promptText="Válaszd ki a pokémont" />
+        <TextArea fx:id="selectedItemsTextArea" editable="false" maxHeight="38.0" maxWidth="370.0" minHeight="25.0" minWidth="370.0" scrollLeft="1.0" scrollTop="11.0" wrapText="true" />
+        <ComboBox fx:id="PokemonComboBox" prefHeight="25.0" prefWidth="247.0" promptText="Válaszd ki a pokémont" />
         <GridPane alignment="CENTER" hgap="10" prefHeight="60.0" prefWidth="427.0" vgap="10">
             <children>
                 <CheckComboBox fx:id="ShinyChoiceBox" prefHeight="25.0" prefWidth="180.0" title="Válaszd ki a fényességet" GridPane.columnIndex="0" GridPane.rowIndex="0" />

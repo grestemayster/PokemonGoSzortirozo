@@ -36,6 +36,9 @@ public class Controller {
     @FXML
     private ComboBox<String> PokemonComboBox;
 
+    @FXML
+    private TextArea selectedItemsTextArea;  // Add this line to link the TextArea
+
     private TextField searchField;
     private ListView<String> listView;
     private List<String> allPokemons;
@@ -288,6 +291,9 @@ public class Controller {
 
         selectedItems.addAll(AppraisalcomboBox.getCheckModel().getCheckedItems());
         selectedItems.remove("Minden értékelés");
+
+        // Update the TextArea with the selected items
+        selectedItemsTextArea.setText(String.join(", ", selectedItems));
     }
 
     @FXML

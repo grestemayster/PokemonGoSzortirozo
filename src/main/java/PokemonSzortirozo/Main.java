@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/Application.fxml"));
         primaryStage.setTitle("Pokémon Szortírozó");
-        primaryStage.setScene(new Scene(root, 429, 206));
+        primaryStage.setScene(new Scene(root, 600, 300));
         primaryStage.show();
     }
 
