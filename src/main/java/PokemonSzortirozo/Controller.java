@@ -294,7 +294,6 @@ public class Controller {
 
         // Update the TextArea with the selected items
         selectedItemsTextArea.setText(String.join(", ", selectedItems));
-        selectedItemsTextArea.setScrollTop(Double.MAX_VALUE);  // Scroll to the bottom
     }
 
     @FXML
@@ -321,6 +320,14 @@ public class Controller {
                 }
                 writer.write(sb.toString());
                 writer.newLine();
+
+                // Show a dialog to inform the user that the save was successful
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Mentés");
+                alert.setHeaderText(null);
+                alert.setContentText("Lementve!");
+                alert.showAndWait();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

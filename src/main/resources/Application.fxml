@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.*?>
 
@@ -10,12 +11,17 @@
         <MenuBar>
             <Menu text="Opciók">
                 <MenuItem onAction="#showSelectedItems" text="Show Selected Items" />
+                <MenuItem onAction="#saveToTxt" text="Save to TXT">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator></MenuItem>
             </Menu>
+            
         </MenuBar>
     </top>
     <center>
         <VBox alignment="CENTER" spacing="10">
-            <TextArea fx:id="selectedItemsTextArea" editable="false" maxHeight="38.0" maxWidth="370.0" minHeight="25.0" minWidth="370.0" visible="false"  />
+            <TextArea fx:id="selectedItemsTextArea" editable="false" maxHeight="38.0" maxWidth="370.0" minHeight="25.0" minWidth="370.0" visible="false" />
             <HBox alignment="CENTER">
                 <ComboBox fx:id="PokemonComboBox" prefHeight="25.0" prefWidth="247.0" promptText="Válaszd ki a pokémont">
                     <HBox.margin>
@@ -39,7 +45,6 @@
                     <RowConstraints />
                 </rowConstraints>
             </GridPane>
-            <Button onAction="#saveToTxt" text="Save to TXT" />
         </VBox>
     </center>
 </BorderPane>
