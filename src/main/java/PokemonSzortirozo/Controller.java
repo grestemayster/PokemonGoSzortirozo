@@ -39,6 +39,12 @@ public class Controller {
     @FXML
     private TextArea selectedItemsTextArea;
 
+    @FXML
+    private TextArea addPokemonTextArea;
+
+    @FXML
+    private VBox addPokemonVBox;
+
     private TextField searchField;
     private ListView<String> listView;
     private List<String> allPokemons;
@@ -332,5 +338,36 @@ public class Controller {
                 e.printStackTrace();
             }
         }
+    }
+
+    @FXML
+    private void addPokemon() {
+        String newPokemon = addPokemonTextArea.getText().trim();
+        if (!newPokemon.isEmpty()) {
+            try {
+                Files.write(Paths.get("data.csv"), Collections.singletonList(newPokemon), StandardOpenOption.APPEND);
+
+                // Update the allPokemons list and the ListView
+                allPokemons.add(newPokemon);
+                filteredPokemons.add(newPokemon);
+
+                // Show a dialog to inform the user that the Pokémon was successfully added
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Hozzáadás");
+                alert.setHeaderText(null);
+                alert.setContentText("Pokemon sikeresen hozzáadva!");
+                alert.showAndWait();
+
+                // Clear the TextArea
+                addPokemonTextArea.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void toggleAddPokemonMenu() {
+        addPokemonVBox.setVisible(!addPokemonVBox.isVisible());
     }
 }
