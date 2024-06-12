@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
-import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.CheckComboBox; // Importáld a CheckComboBox osztályt
 
 import java.io.*;
 import java.nio.file.*;
@@ -16,20 +16,13 @@ import java.util.stream.Collectors;
 public class Controller {
 
     private List<String> selectedItems = new ArrayList<>();
-    private boolean isAppraisalComboBoxUpdating = false;
-    private boolean isShinyChoiceBoxUpdating = false;
-    private boolean isShadowChoiceBoxUpdating = false;
-    private boolean isCostumeChoiceBoxUpdating = false;
 
     @FXML
     private CheckComboBox<String> AppraisalcomboBox;
-
     @FXML
     private CheckComboBox<String> ShinyChoiceBox;
-
     @FXML
     private CheckComboBox<String> ShadowChoiceBox;
-
     @FXML
     private CheckComboBox<String> CostumeChoiceBox;
 
@@ -52,73 +45,20 @@ public class Controller {
     private ObservableList<String> selectedPokemons = FXCollections.observableArrayList();
     private Popup popup;
 
+    private CheckComboBoxHandler checkComboBoxHandler;
+
     @FXML
     public void initialize() {
-        initializeCheckComboBoxes();
+        checkComboBoxHandler = new CheckComboBoxHandler();
+        checkComboBoxHandler.setAppraisalcomboBox(this.AppraisalcomboBox);
+        checkComboBoxHandler.setShinyChoiceBox(this.ShinyChoiceBox);
+        checkComboBoxHandler.setShadowChoiceBox(this.ShadowChoiceBox);
+        checkComboBoxHandler.setCostumeChoiceBox(this.CostumeChoiceBox);
+        checkComboBoxHandler.initialize();
 
         try {
             allPokemons = Files.readAllLines(Paths.get("data.csv"));
             initializePokemonComboBox();
-
-            ShinyChoiceBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
-                if (isShinyChoiceBoxUpdating) return;
-
-                isShinyChoiceBoxUpdating = true;
-                try {
-                    while (c.next()) {
-                        if (c.wasAdded() || c.wasRemoved()) {
-                            if (ShinyChoiceBox.getCheckModel().getCheckedItems().size() > 1) {
-                                String lastAdded = c.getAddedSubList().get(c.getAddedSubList().size() - 1);
-                                ShinyChoiceBox.getCheckModel().clearChecks();
-                                ShinyChoiceBox.getCheckModel().check(lastAdded);
-                            }
-                        }
-                        updateSelectedItems();
-                    }
-                } finally {
-                    isShinyChoiceBoxUpdating = false;
-                }
-            });
-
-            ShadowChoiceBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
-                if (isShadowChoiceBoxUpdating) return;
-
-                isShadowChoiceBoxUpdating = true;
-                try {
-                    while (c.next()) {
-                        if (c.wasAdded() || c.wasRemoved()) {
-                            if (ShadowChoiceBox.getCheckModel().getCheckedItems().size() > 1) {
-                                String lastAdded = c.getAddedSubList().get(c.getAddedSubList().size() - 1);
-                                ShadowChoiceBox.getCheckModel().clearChecks();
-                                ShadowChoiceBox.getCheckModel().check(lastAdded);
-                            }
-                        }
-                        updateSelectedItems();
-                    }
-                } finally {
-                    isShadowChoiceBoxUpdating = false;
-                }
-            });
-
-            CostumeChoiceBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
-                if (isCostumeChoiceBoxUpdating) return;
-
-                isCostumeChoiceBoxUpdating = true;
-                try {
-                    while (c.next()) {
-                        if (c.wasAdded() || c.wasRemoved()) {
-                            if (CostumeChoiceBox.getCheckModel().getCheckedItems().size() > 1) {
-                                String lastAdded = c.getAddedSubList().get(c.getAddedSubList().size() - 1);
-                                CostumeChoiceBox.getCheckModel().clearChecks();
-                                CostumeChoiceBox.getCheckModel().check(lastAdded);
-                            }
-                        }
-                        updateSelectedItems();
-                    }
-                } finally {
-                    isCostumeChoiceBoxUpdating = false;
-                }
-            });
 
             selectedPokemons.addListener((ListChangeListener<String>) c -> {
                 updateSelectedItems();
@@ -128,42 +68,6 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void initializeCheckComboBoxes() {
-        ShinyChoiceBox.getItems().addAll("Shiny, de nem csak shiny", "Csak shiny", "Nem lehet Shiny");
-
-        ShadowChoiceBox.getItems().addAll("Minden forma", "Csak Sima", "Shadow,Purified", "Csak Shadow", "Csak Purified");
-
-        CostumeChoiceBox.getItems().addAll("Minden kinézet", "Csak kinézet nélküli", "Csak kinézetes");
-
-        AppraisalcomboBox.getItems().addAll("Minden értékelés", "0*", "1*", "2*", "3*", "4*");
-
-        AppraisalcomboBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
-            if (isAppraisalComboBoxUpdating) return;
-
-            isAppraisalComboBoxUpdating = true;
-            try {
-                while (c.next()) {
-                    if (c.wasAdded()) {
-                        if (c.getAddedSubList().contains("Minden értékelés")) {
-                            AppraisalcomboBox.getCheckModel().checkAll();
-                        } else if (AppraisalcomboBox.getCheckModel().getCheckedItems().size() == AppraisalcomboBox.getItems().size() - 1) {
-                            AppraisalcomboBox.getCheckModel().check("Minden értékelés");
-                        }
-                    } else if (c.wasRemoved()) {
-                        if (c.getRemoved().contains("Minden értékelés")) {
-                            AppraisalcomboBox.getCheckModel().clearChecks();
-                        } else if (AppraisalcomboBox.getCheckModel().isChecked("Minden értékelés")) {
-                            AppraisalcomboBox.getCheckModel().clearCheck("Minden értékelés");
-                        }
-                    }
-                    updateSelectedItems();
-                }
-            } finally {
-                isAppraisalComboBoxUpdating = false;
-            }
-        });
     }
 
     private void initializePokemonComboBox() {
@@ -270,14 +174,14 @@ public class Controller {
         selectedItems.clear();
         selectedItems.addAll(selectedPokemons);
 
-        List<String> shinyChoices = ShinyChoiceBox.getCheckModel().getCheckedItems();
+        List<String> shinyChoices = checkComboBoxHandler.getShinySelectedItems();
         if (shinyChoices.contains("Csak shiny")) {
             selectedItems.add("shiny");
         } else if (shinyChoices.contains("Nem lehet Shiny")) {
             selectedItems.add("!shiny");
         }
 
-        List<String> shadowChoices = ShadowChoiceBox.getCheckModel().getCheckedItems();
+        List<String> shadowChoices = checkComboBoxHandler.getShadowSelectedItems();
         if (shadowChoices.contains("Csak Sima")) {
             selectedItems.add("!shadow&!purified");
         } else if (shadowChoices.contains("Shadow,Purified")) {
@@ -288,14 +192,14 @@ public class Controller {
             selectedItems.add("purified");
         }
 
-        List<String> costumeChoices = CostumeChoiceBox.getCheckModel().getCheckedItems();
+        List<String> costumeChoices = checkComboBoxHandler.getCostumeSelectedItems();
         if (costumeChoices.contains("Csak kinézet nélküli")) {
             selectedItems.add("!costumed");
         } else if (costumeChoices.contains("Csak kinézetes")) {
             selectedItems.add("costumed");
         }
 
-        selectedItems.addAll(AppraisalcomboBox.getCheckModel().getCheckedItems());
+        selectedItems.addAll(checkComboBoxHandler.getAppraisalSelectedItems());
         selectedItems.remove("Minden értékelés");
 
         // Update the TextArea with the selected items
