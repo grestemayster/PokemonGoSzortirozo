@@ -71,6 +71,7 @@ public class CheckComboBoxHandler {
             } finally {
                 isAppraisalComboBoxUpdating = false;
             }
+            System.out.println("Appraisal checked items: " + getAppraisalSelectedItems());
         });
     }
 
@@ -94,6 +95,7 @@ public class CheckComboBoxHandler {
             } finally {
                 isShinyChoiceBoxUpdating = false;
             }
+            System.out.println("Shiny checked items: " + getShinySelectedItems());
         });
     }
 
@@ -117,6 +119,7 @@ public class CheckComboBoxHandler {
             } finally {
                 isShadowChoiceBoxUpdating = false;
             }
+            System.out.println("Shadow checked items: " + getShadowSelectedItems());
         });
     }
 
@@ -140,6 +143,7 @@ public class CheckComboBoxHandler {
             } finally {
                 isCostumeChoiceBoxUpdating = false;
             }
+            System.out.println("Costume checked items: " + getCostumeSelectedItems());
         });
     }
 

@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
-import org.controlsfx.control.CheckComboBox; // Importáld a CheckComboBox osztályt
+import org.controlsfx.control.CheckComboBox;
 
 import java.io.*;
 import java.nio.file.*;
@@ -202,8 +202,8 @@ public class Controller {
         selectedItems.addAll(checkComboBoxHandler.getAppraisalSelectedItems());
         selectedItems.remove("Minden értékelés");
 
-        // Update the TextArea with the selected items
         selectedItemsTextArea.setText(String.join(", ", selectedItems));
+        System.out.println("Selected items updated: " + selectedItems);
     }
 
     @FXML
@@ -225,13 +225,12 @@ public class Controller {
                             sb.append(",");
                         }
                         sb.append(item);
+                        firstItem = false;
                     }
-                    firstItem = false;
                 }
                 writer.write(sb.toString());
                 writer.newLine();
 
-                // Show a dialog to inform the user that the save was successful
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Mentés");
                 alert.setHeaderText(null);
@@ -251,18 +250,15 @@ public class Controller {
             try {
                 Files.write(Paths.get("data.csv"), Collections.singletonList(newPokemon), StandardOpenOption.APPEND);
 
-                // Update the allPokemons list and the ListView
                 allPokemons.add(newPokemon);
                 filteredPokemons.add(newPokemon);
 
-                // Show a dialog to inform the user that the Pokémon was successfully added
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Hozzáadás");
                 alert.setHeaderText(null);
                 alert.setContentText("Pokemon sikeresen hozzáadva!");
                 alert.showAndWait();
 
-                // Clear the TextArea
                 addPokemonTextArea.clear();
             } catch (IOException e) {
                 e.printStackTrace();
