@@ -13,6 +13,8 @@ public class CheckComboBoxHandler {
     private boolean isShadowChoiceBoxUpdating = false;
     private boolean isCostumeChoiceBoxUpdating = false;
 
+    private Runnable onSelectionChangedCallback;
+
     @FXML
     private CheckComboBox<String> AppraisalcomboBox;
     @FXML
@@ -45,6 +47,10 @@ public class CheckComboBoxHandler {
         this.CostumeChoiceBox = costumeChoiceBox;
     }
 
+    public void setOnSelectionChangedCallback(Runnable callback) {
+        this.onSelectionChangedCallback = callback;
+    }
+
     private void initializeAppraisalComboBox() {
         AppraisalcomboBox.getItems().addAll("Minden értékelés", "0*", "1*", "2*", "3*", "4*");
 
@@ -71,7 +77,9 @@ public class CheckComboBoxHandler {
             } finally {
                 isAppraisalComboBoxUpdating = false;
             }
-            System.out.println("Appraisal checked items: " + getAppraisalSelectedItems());
+            if (onSelectionChangedCallback != null) {
+                onSelectionChangedCallback.run();
+            }
         });
     }
 
@@ -95,7 +103,9 @@ public class CheckComboBoxHandler {
             } finally {
                 isShinyChoiceBoxUpdating = false;
             }
-            System.out.println("Shiny checked items: " + getShinySelectedItems());
+            if (onSelectionChangedCallback != null) {
+                onSelectionChangedCallback.run();
+            }
         });
     }
 
@@ -119,7 +129,9 @@ public class CheckComboBoxHandler {
             } finally {
                 isShadowChoiceBoxUpdating = false;
             }
-            System.out.println("Shadow checked items: " + getShadowSelectedItems());
+            if (onSelectionChangedCallback != null) {
+                onSelectionChangedCallback.run();
+            }
         });
     }
 
@@ -143,7 +155,9 @@ public class CheckComboBoxHandler {
             } finally {
                 isCostumeChoiceBoxUpdating = false;
             }
-            System.out.println("Costume checked items: " + getCostumeSelectedItems());
+            if (onSelectionChangedCallback != null) {
+                onSelectionChangedCallback.run();
+            }
         });
     }
 

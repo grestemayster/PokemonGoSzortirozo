@@ -56,13 +56,14 @@ public class Controller {
         checkComboBoxHandler.setCostumeChoiceBox(this.CostumeChoiceBox);
         checkComboBoxHandler.initialize();
 
+        checkComboBoxHandler.setOnSelectionChangedCallback(this::updateSelectedItems);
+
         try {
             allPokemons = Files.readAllLines(Paths.get("data.csv"));
             initializePokemonComboBox();
 
             selectedPokemons.addListener((ListChangeListener<String>) c -> {
                 updateSelectedItems();
-                System.out.println("Checked items: " + selectedItems);
             });
 
         } catch (IOException e) {
@@ -172,38 +173,66 @@ public class Controller {
 
     private void updateSelectedItems() {
         selectedItems.clear();
-        selectedItems.addAll(selectedPokemons);
 
         List<String> shinyChoices = checkComboBoxHandler.getShinySelectedItems();
         if (shinyChoices.contains("Csak shiny")) {
-            selectedItems.add("shiny");
+            selectedItems.add("&shiny");
         } else if (shinyChoices.contains("Nem lehet Shiny")) {
-            selectedItems.add("!shiny");
+            selectedItems.add("&!shiny");
         }
 
         List<String> shadowChoices = checkComboBoxHandler.getShadowSelectedItems();
         if (shadowChoices.contains("Csak Sima")) {
-            selectedItems.add("!shadow&!purified");
+            selectedItems.add("&!shadow&!purified");
         } else if (shadowChoices.contains("Shadow,Purified")) {
-            selectedItems.add("shadow,purified");
+            selectedItems.add("&shadow,purified");
         } else if (shadowChoices.contains("Csak Shadow")) {
-            selectedItems.add("shadow");
+            selectedItems.add("&shadow");
         } else if (shadowChoices.contains("Csak Purified")) {
-            selectedItems.add("purified");
+            selectedItems.add("&purified");
         }
 
         List<String> costumeChoices = checkComboBoxHandler.getCostumeSelectedItems();
         if (costumeChoices.contains("Csak kinézet nélküli")) {
-            selectedItems.add("!costumed");
+            selectedItems.add("&!costumed");
         } else if (costumeChoices.contains("Csak kinézetes")) {
-            selectedItems.add("costumed");
+            selectedItems.add("&costumed");
         }
 
-        selectedItems.addAll(checkComboBoxHandler.getAppraisalSelectedItems());
+        List<String> appraisalChoices = checkComboBoxHandler.getAppraisalSelectedItems();
+        if (appraisalChoices.contains("Minden értékelés")) {
+            appraisalChoices = Arrays.asList("0*", "1*", "2*", "3*", "4*");
+        }
+        if (!appraisalChoices.isEmpty()) {
+            selectedItems.add("&" + appraisalChoices.get(0));
+            for (int i = 1; i < appraisalChoices.size(); i++) {
+                selectedItems.add(appraisalChoices.get(i));
+            }
+        }
         selectedItems.remove("Minden értékelés");
 
-        selectedItemsTextArea.setText(String.join(", ", selectedItems));
-        System.out.println("Selected items updated: " + selectedItems);
+        // Create a list of all items to display, ensuring no comma before &
+        String displayString = String.join(",", selectedPokemons);
+        String prefixedItems = selectedItems.stream()
+                .filter(item -> item.startsWith("&"))
+                .collect(Collectors.joining());
+        String nonPrefixedItems = selectedItems.stream()
+                .filter(item -> !item.startsWith("&"))
+                .collect(Collectors.joining(","));
+
+        // Concatenate the parts with commas between them
+        if (!displayString.isEmpty() && !prefixedItems.isEmpty()) {
+            displayString += prefixedItems;
+        } else if (!prefixedItems.isEmpty()) {
+            displayString = prefixedItems;
+        }
+        if (!displayString.isEmpty() && !nonPrefixedItems.isEmpty()) {
+            displayString += "," + nonPrefixedItems;
+        } else if (!nonPrefixedItems.isEmpty()) {
+            displayString = nonPrefixedItems;
+        }
+
+        selectedItemsTextArea.setText(displayString);
     }
 
     @FXML
@@ -228,7 +257,9 @@ public class Controller {
                         firstItem = false;
                     }
                 }
-                writer.write(sb.toString());
+
+                String outputString = sb.toString().replaceAll(",&", "&"); // Ensure no comma before &
+                writer.write(outputString);
                 writer.newLine();
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
